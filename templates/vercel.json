@@ -8,6 +8,18 @@
   ],
   "routes": [
     {
+      "src": "/api/shorten",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/r/(.*)",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/api/link/(.*)",
+      "dest": "api/index.py"
+    },
+    {
       "src": "/(.*)",
       "dest": "api/index.py"
     }

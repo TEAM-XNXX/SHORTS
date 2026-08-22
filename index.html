@@ -1,177 +1,39 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shorts - URL Shortener</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+async function shortenURL() {
+    const longUrlInput = document.getElementById('longUrl').value;
+    const resultBox = document.getElementById('resultBox');
+    const shortenedLink = document.getElementById('shortenedLink');
 
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+    if (!longUrlInput) {
+        alert('দয়া করে একটি সঠিক URL দিন!');
+        return;
+    }
 
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 2rem;
-        }
-
-        p {
-            color: #666;
-            margin-bottom: 25px;
-            font-size: 0.95rem;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        input[type="url"] {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        input[type="url"]:focus {
-            border-color: #667eea;
-        }
-
-        button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background: #5a6fd6;
-        }
-
-        .result-box {
-            margin-top: 25px;
-            padding: 15px;
-            background: #f7fafc;
-            border: 1px dashed #cbd5e0;
-            border-radius: 8px;
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .result-box a {
-            color: #667eea;
-            font-weight: bold;
-            text-decoration: none;
-            word-break: break-all;
-            text-align: left;
-        }
-
-        .copy-btn {
-            background: #4a5568;
-            padding: 8px 12px;
-            font-size: 0.85rem;
-            border-radius: 5px;
-            white-space: nowrap;
-        }
-
-        .copy-btn:hover {
-            background: #2d3748;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1>Shorts 🔗</h1>
-        <p>আপনার বড় এবং জটিল ইউআরএলটি এখানে দিয়ে ছোট করে নিন।</p>
+    try {
+        const apiUrl = `${window.location.origin}/api/index`;
         
-        <div class="input-group">
-            <input type="url" id="longUrl" placeholder="https://example.com" required>
-            <button onclick="shortenURL()">ছোট করুন</button>
-        </div>
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ longUrl: longUrlInput })
+        });
 
-        <div class="result-box" id="resultBox">
-            <a href="#" id="shortenedLink" target="_blank"></a>
-            <button class="copy-btn" onclick="copyLink()">কপি করুন</button>
-        </div>
-    </div>
-
-    <script>
-        async function shortenURL() {
-            const longUrlInput = document.getElementById('longUrl').value;
-            const resultBox = document.getElementById('resultBox');
-            const shortenedLink = document.getElementById('shortenedLink');
-
-            if (!longUrlInput) {
-                alert('দয়া করে একটি সঠিক URL দিন!');
-                return;
-            }
-
-            try {
-                // Vercel ব্যাকএন্ড এপিআই-তে ডেটা পাঠানো হচ্ছে
-                const response = await fetch('/shorten', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ longUrl: longUrlInput })
-                });
-
-                if (!response.ok) {
-                    throw new Error('সার্ভারে সমস্যা হয়েছে');
-                }
-
-                const data = await response.json();
-                
-                // ব্যাকএন্ড থেকে আসা শর্ট ইউআরএল স্ক্রিনে দেখানো
-                shortenedLink.href = data.shortUrl;
-                shortenedLink.innerText = data.shortUrl;
-                resultBox.style.display = 'flex';
-
-            } catch (error) {
-                alert('দুঃখিত! লিংকটি ছোট করা যায়নি।');
-                console.error(error);
-            }
+        if (!response.ok) {
+            throw new Error('সার্ভারে সমস্যা হয়েছে');
         }
 
-        function copyLink() {
-            const linkText = document.getElementById('shortenedLink').innerText;
-            navigator.clipboard.writeText(linkText);
-            alert('লিংকটি কপি করা হয়েছে!');
-        }
-    </script>
-</body>
-</html>
+        const data = await response.json();
+        
+        // এখানে আপনার চাওয়া ফরম্যাট (?q=আইডি) অনুযায়ী শর্ট লিংক তৈরি করা হচ্ছে
+        const shortUrl = `${window.location.origin}/?q=${data.shortId}`;
+        
+        shortenedLink.href = shortUrl;
+        shortenedLink.innerText = shortUrl;
+        resultBox.style.display = 'flex';
+
+    } catch (error) {
+        alert('দুঃখিত! লিংকটি ছোট করা যায়নি।');
+        console.error(error);
+    }
+}

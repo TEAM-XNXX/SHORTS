@@ -31,7 +31,7 @@
         .search-box-wrapper { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 40px; text-align: left; border: 1px solid #f1f5f9; }
         .input-group { display: flex; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 6px 10px; align-items: center; }
         .input-group input { flex: 1; border: none; background: transparent; padding: 14px 10px; font-size: 16px; outline: none; color: #334155; }
-        .btn-shorten { background: #0066cc; color: white; border: none; width: 46px; height: 46px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; transition: background 0.2s; }
+        .btn-shorten { background: #0066cc; color: white; border: none; padding: 0 20px; height: 46px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; transition: background 0.2s; white-space: nowrap; }
         .btn-shorten:hover { background: #0052a3; }
         .advanced-opt { margin-top: 15px; display: flex; align-items: center; gap: 8px; font-size: 14px; color: #64748b; font-weight: 500; cursor: pointer; width: max-content; }
         .advanced-opt input { cursor: pointer; width: 16px; height: 16px; }
@@ -107,8 +107,8 @@
         <!-- শর্টনার ইনপুট বক্স -->
         <div class="search-box-wrapper">
             <div class="input-group">
-                <input type="url" id="long-url" placeholder="https://example.com" required>
-                <button id="shorten-btn" class="btn-shorten"><i class="fa-solid fa-scissors"></i></button>
+                <input type="url" id="long-url" placeholder="https://example.com/your-long-link" required>
+                <button id="shorten-btn" class="btn-shorten">Shorten</button>
             </div>
             <label class="advanced-opt">
                 <input type="checkbox"> Advanced options

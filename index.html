@@ -54,10 +54,13 @@
         .result-box a { color: #007bff; font-weight: bold; text-decoration: none; }
         .copy-btn {
             background-color: #007bff;
-            padding: 5px 10px;
-            font-size: 12px;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
             margin-top: 10px;
-            display: inline-block;
+            border-radius: 4px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -78,8 +81,8 @@
 </div>
 
 <script>
-    async function shortenUrl() {
-        const longUrl = document.getElementById('longUrl').value;
+    function shortenUrl() {
+        const longUrl = document.getElementById('longUrl').value.trim();
         const resultBox = document.getElementById('resultBox');
         const shortenedUrlAnchor = document.getElementById('shortenedUrl');
 
@@ -88,34 +91,20 @@
             return;
         }
 
-        shortenedUrlAnchor.innerText = "লোডিং...";
-        resultBox.style.display = "block";
-
         try {
-            // Allorigins CORS প্রক্সি এবং is.gd API ব্যবহার করা হয়েছে যা ব্রাউজারে ব্লক হয় না
-            const targetUrl = `https://is.gd{encodeURIComponent(longUrl)}`;
-            const response = await fetch(`https://allorigins.win{encodeURIComponent(targetUrl)}`);
+            const cleanUrl = encodeURIComponent(longUrl);
+            const shortUrl = `https://tinyurl.com{cleanUrl}`;
             
-            if (response.ok) {
-                const data = await response.json();
-                const shortUrl = data.contents.trim();
-                
-                if(shortUrl.startsWith("https://") || shortUrl.startsWith("http://")) {
-                    shortenedUrlAnchor.href = shortUrl;
-                    shortenedUrlAnchor.innerText = shortUrl;
-                } else {
-                    shortenedUrlAnchor.innerText = "সঠিক লিঙ্ক দিন! (যেমন: https://google.com)";
-                }
-            } else {
-                shortenedUrlAnchor.innerText = "লিঙ্ক তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।";
-            }
+            shortenedUrlAnchor.href = shortUrl;
+            shortenedUrlAnchor.innerText = "এখানে ক্লিক করে আপনার ফ্রি শর্ট লিঙ্কটি নিন";
+            resultBox.style.display = "block";
         } catch (error) {
-            shortenedUrlAnchor.innerText = "নেটওয়ার্ক সমস্যা! পরে চেষ্টা করুন।";
+            shortenedUrlAnchor.innerText = "সমস্যা হয়েছে! আবার চেষ্টা করুন।";
         }
     }
 
     function copyLink() {
-        const linkText = document.getElementById('shortenedUrl').innerText;
+        const linkText = document.getElementById('shortenedUrl').href;
         navigator.clipboard.writeText(linkText);
         alert('লিঙ্কটি কপি করা হয়েছে!');
     }

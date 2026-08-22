@@ -1,116 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#4f46e5" />
-<meta name="color-scheme" content="only light" />
-<title>Sign in · Gshort.net</title>
-<meta name="description" content="Create short URLs, manage destinations, generate Google sharing links and track clear click totals with Gshort.net." />
-
-<meta name="robots" content="noindex, nofollow" />
-
-<meta property="og:title" content="Sign in · Gshort.net" />
-<meta property="og:description" content="Create short URLs, manage destinations, generate Google sharing links and track clear click totals with Gshort.net." />
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="Gshort.net" />
-<meta property="og:locale" content="en_US" />
-
-<meta property="og:image" content="https://gshort.net/og-image.png" /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content="Gshort.net URL shortener and link management" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:image" content="https://gshort.net/og-image.png" /><meta name="twitter:image:alt" content="Gshort.net URL shortener and link management" />
-<meta name="twitter:title" content="Sign in · Gshort.net" />
-<meta name="twitter:description" content="Create short URLs, manage destinations, generate Google sharing links and track clear click totals with Gshort.net." />
-<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
-<link rel="manifest" href="/site.webmanifest" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
-<script defer src="/js/alpine-components.js?v=20260816-affiliate-v1"></script>
-<script defer src="/js/alpine-csp-3.16.1.min.js?v=20260816-affiliate-v1"></script>
-<link rel="stylesheet" href="/css/app.css?v=20260818-fallback-start-v6" />
-
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-39WHBHWWJS"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-39WHBHWWJS');
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in · Gshort.net</title>
+    <!-- সিএসএস ফাইল লিঙ্ক -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="auth-surface antialiased">
-<div class="auth-page auth-simple-page">
-  <header class="auth-topbar auth-simple-topbar">
-    
+<body>
 
-<a href="/" class="brand-lockup group inline-flex items-center gap-3" aria-label="Gshort.net home">
-  <span class="brand-mark " aria-hidden="true">
-    <svg viewBox="0 0 48 48" role="presentation">
-      <path class="brand-g" d="M34.5 16.5a12.5 12.5 0 1 0 1.5 16V25h-9" />
-      <circle class="brand-spark" cx="37" cy="13" r="2.2" />
-    </svg>
-  </span>
-  <span class="text-[19px] font-display font-extrabold tracking-[-0.045em] text-slate-950">
-    Gshort<span class="brand-word-accent">.net</span>
-  </span>
-</a>
+    <div class="login-container">
+        <!-- গুগলের লোগো (CSS দিয়ে সাইজ ফিক্স করা হয়েছে) -->
+        <div class="logo-area">
+            <svg class="google-logo" viewBox="0 0 24 24" width="100%" height="100%">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.85c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+        </div>
 
-  </header>
+        <!-- গুগল সাইন-ইন বাটন -->
+        <a href="#" class="btn-google">
+            <img src="https://gstatic.com" alt="Google">
+            Continue with Google
+        </a>
 
-  <main class="auth-simple-main">
-    <section class="auth-simple-panel">
-      <h1 class="auth-page-title">Log in</h1>
-<p class="auth-simple-copy">Create a Gshort account to start shortening URLs, or log in if you already have one.</p>
+        <div class="separator">
+            <span>or continue with email</span>
+        </div>
 
+        <!-- লগইন ফর্ম -->
+        <form>
+            <div class="input-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" placeholder="you@example.com" required>
+            </div>
 
-  <a href="/auth/google" class="auth-google-button">
-    <svg class="h-5 w-5" viewBox="0 0 24 24"><path fill="#4285F4" d="M21.6 12.2c0-.6-.1-1.3-.2-1.9H12v3.6h5.4a4.6 4.6 0 01-2 3l3.2 2.5c1.9-1.7 3-4.3 3-7.2z"/><path fill="#34A853" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0012 22z"/><path fill="#FBBC05" d="M6.4 14a6 6 0 010-3.8V7.6H3.1a10 10 0 000 8.9z"/><path fill="#EA4335" d="M12 6.1c1.5 0 2.8.5 3.8 1.5l2.8-2.8A10 10 0 003.1 7.6l3.3 2.6C7.2 7.9 9.4 6.1 12 6.1z"/></svg>
-    Continue with Google
-  </a>
-  <div class="auth-divider">
-    <span></span><b>or continue with email</b><span></span>
-  </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+            </div>
 
+            <button type="submit" class="btn-login">
+                Log in
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+        </form>
 
-
-
-
-<form method="post" action="/auth/login" class="auth-form auth-simple-form">
-  <input type="hidden" name="_csrf" value="f11c294df4e521f76eb0579a8d759c9e142a8aef832bfe47" />
-  <label class="auth-field">
-    <span>Email:</span>
-    <div class="auth-input-wrap">
-      <input name="email" type="email" required autocomplete="email" autofocus value="" placeholder="you@example.com" />
+        <!-- রেজিস্টার লিঙ্ক -->
+        <div class="footer-links">
+            No account? <a href="#">Register</a>
+        </div>
     </div>
-  </label>
-  <label class="auth-field" x-data="{ showPassword: false }">
-    <span>Password:</span>
-    <div class="auth-input-wrap">
-      <input name="password" :type="showPassword ? 'text' : 'password'" required autocomplete="current-password" placeholder="Enter your password" />
-      <button type="button" class="auth-password-toggle auth-eye-toggle" @click="showPassword = !showPassword" :aria-label="showPassword ? 'Hide password' : 'Show password'">
-        <svg x-show="!showPassword" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6S2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.5"/></svg>
-        <svg x-show="showPassword" x-cloak fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m4 4 16 16M10.6 6.2A9.8 9.8 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-2.5 3.2M8.1 7.2C4.6 9 2.5 12 2.5 12s3.5 6 9.5 6c1.5 0 2.8-.4 4-1"/></svg>
-      </button>
-    </div>
-  </label>
-  <button class="auth-submit">Log in <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 18 6-6-6-6"/></svg></button>
-</form>
-<p class="auth-switch">No account? <a href="/auth/register">Register</a></p>
-
-      <p class="auth-secure-note">
-        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 10V8a5 5 0 0 1 10 0v2m-11 0h12v10H6V10Z"/></svg>
-        Secure session access
-      </p>
-    </section>
-  </main>
-
-  <footer class="auth-footer auth-simple-footer">
-    <span>&copy; 2026 Gshort.net</span>
-    <nav><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/report">Report abuse</a></nav>
-  </footer>
-</div>
 
 </body>
 </html>

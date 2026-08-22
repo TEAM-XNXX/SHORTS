@@ -1,3 +1,14 @@
+# একদম ওপরে ইম্পোর্টের লাইনে render_template যোগ করুন
+from flask import Flask, jsonify, request, redirect, render_template
+
+# ... (বাকি কোড আগের মতোই থাকবে) ...
+
+# home ফাংশনটি এভাবে পরিবর্তন করুন যেন এটি সরাসরি index.html দেখায়
+@app.get("/")
+def home():
+    return render_template("index.html")
+
+
 import os
 import secrets
 import string

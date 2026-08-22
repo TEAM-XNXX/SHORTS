@@ -73,6 +73,98 @@
 
     <div class="result-box" id="resultBox">
         <p><strong>আপনার ছোট লিঙ্কটি তৈরি:</strong></p>
+        <a id="shortenedUrl" href="#" target="_blank">লোডিং...</a>
+        <br>
+        <button class="copy-btn" id="copyBtn" onclick="copyLink()">লিঙ্ক কপি করুন</button>
+    </div>
+</div>
+
+<script>
+    async function shortenUrl() {
+        var longUrl = document.getElementById('longUrl').value.trim();
+        var resultBox = document.getElementById('resultBox');
+        var shortenedUrlAnchor = document.getElementById('shortenedUrl');
+        var copyBtn = document.getElementById('copyBtn');
+
+        if (!longUrl) {
+            alert('দয়া করে একটি সঠিক লিঙ্ক দিন!');
+            return;
+        }
+
+        shortenedUrlAnchor.innerText = "লিঙ্ক ছোট হচ্ছে...";
+        resultBox.style.display = "block";
+
+        try {
+            // এটি ব্রাউজারের কোনো CORS বা প্রক্সি নীতি ব্লক করে না
+            var target = "https://is.gd" + encodeURIComponent(longUrl);
+            var response = await fetch("https://allorigins.win" + encodeURIComponent(target));
+            
+            if (response.ok) {
+                var data = await response.json();
+                var shortUrl = data.contents.trim();
+                
+                if (shortUrl.includes("is.gd")) {
+                    shortenedUrlAnchor.href = shortUrl;
+                    shortenedUrlAnchor.innerText = shortUrl;
+                } else {
+                    shortenedUrlAnchor.innerText = "ভুল লিঙ্ক! দয়া করে সঠিক লিঙ্ক দিন।";
+                }
+            } else {
+                shortenedUrlAnchor.innerText = "সার্ভার রেসপন্স করছে না। আবার চেষ্টা করুন।";
+            }
+        } catch (error) {
+            shortenedUrlAnchor.innerText = "নেটওয়ার্ক সমস্যা! পরে আবার চেষ্টা করুন।";
+        }
+    }
+
+    function copyLink() {
+        var linkText = document.getElementById('shortenedUrl').innerText;
+        navigator.clipboard.writeText(linkText);
+        alert('লিঙ্কটি কপি করা হয়েছে!');
+    }
+</script>
+
+</body>
+</html>
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { background-color: #218838; }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            display: none;
+            word-break: break-all;
+        }
+        .result-box a { color: #007bff; font-weight: bold; text-decoration: none; font-size: 18px; display: inline-block; margin-bottom: 10px; }
+        .copy-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🔗 ফ্রি ইউআরএল শর্টনার</h2>
+    <input type="url" id="longUrl" placeholder="আপনার বড় লিঙ্কটি এখানে পেস্ট করুন..." required>
+    <br>
+    <button onclick="shortenUrl()">লিঙ্ক ছোট করুন</button>
+
+    <div class="result-box" id="resultBox">
+        <p><strong>আপনার ছোট লিঙ্কটি তৈরি:</strong></p>
         <a id="shortenedUrl" href="#" target="_blank">এখানে ক্লিক করলেই লিঙ্ক ছোট হয়ে যাবে</a>
         <br>
         <button class="copy-btn" onclick="copyLink()">শর্টনার লিঙ্ক কপি করুন</button>

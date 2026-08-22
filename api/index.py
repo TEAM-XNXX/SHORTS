@@ -9,218 +9,154 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-LINKS = {}
+# টেস্ট করার জন্য স্ক্রিনশটের মতো ১টি লিঙ্ক আগে থেকেই মেমোরিতে রাখা হলো
+LINKS = {
+    "qLf0aM3hhImkBEBfG": {
+        "url": "https://derisivepageant.com...",
+        "clicks": 5901,
+        "date": "Aug 20, 2026",
+        "title": "XYZ FF"
+    }
+}
 
 ALPHABET = string.ascii_letters + string.digits
-CODE_LENGTH = 7
+CODE_LENGTH = 17  # স্ক্রিনশট অনুযায়ী কোড একটু বড় করা হয়েছে
 
 
 def valid_url(value):
     try:
         parsed = urlparse(value)
-        return (
-            parsed.scheme in ("http", "https")
-            and bool(parsed.netloc)
-        )
+        return parsed.scheme in ("http", "https") and bool(parsed.netloc)
     except Exception:
         return False
 
 
 def make_code():
     while True:
-        code = "".join(
-            secrets.choice(ALPHABET)
-            for _ in range(CODE_LENGTH)
-        )
+        code = "".join(secrets.choice(ALPHABET) for _ in range(CODE_LENGTH))
         if code not in LINKS:
             return code
 
 
-# সরাসরি পাইথনের ভেতরেই সম্পূর্ণ HTML ডিজাইন কোডটি ঢুকিয়ে দেওয়া হলো
+# নতুন প্রিমিয়াম অ্যাডভান্সড ড্যাশবোর্ড UI
 HTML_PAGE = """
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gshort.net · Free URL Shortener</title>
+    <title>Gshort · Simple Link Workspace</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .shortener-container { background: #ffffff; padding: 50px 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); width: 100%; max-width: 650px; text-align: center; }
-        .brand-title { font-size: 36px; color: #1e293b; font-weight: 800; margin-bottom: 8px; letter-spacing: -1px; }
-        .brand-title span { color: #2563eb; }
-        .brand-subtitle { font-size: 15px; color: #64748b; margin-bottom: 35px; }
-        .input-group { display: flex; gap: 10px; background: #f8fafc; padding: 8px; border-radius: 12px; border: 2px solid #e2e8f0; transition: border-color 0.2s; }
-        .input-group:focus-within { border-color: #2563eb; background: #fff; }
-        .input-group input { flex: 1; border: none; background: transparent; padding: 12px 15px; font-size: 16px; outline: none; color: #334155; }
-        .btn-shorten { background: #2563eb; color: white; border: none; padding: 0 24px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
-        .btn-shorten:hover { background: #1d4ed8; }
-        .btn-shorten:disabled { background: #94a3b8; cursor: not-allowed; }
-        .result-container { margin-top: 30px; padding: 20px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; text-align: left; }
-        .result-label { font-size: 14px; color: #166534; font-weight: 600; margin-bottom: 8px; }
-        .result-field { display: flex; gap: 10px; }
-        .result-field input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; background: #fff; color: #1e293b; font-weight: 500; }
-        .btn-copy { background: #10b981; color: white; border: none; padding: 0 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .btn-copy:hover { background: #059669; }
-        .success-text { font-size: 13px; color: #15803d; margin-top: 6px; font-weight: 500; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: #f4f6fa; color: #333; padding-bottom: 40px; }
+        
+        /* নেভিগেশন বার */
+        .navbar { display: flex; justify-content: space-between; align-items: center; background: white; padding: 12px 6%; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .nav-left { display: flex; align-items: center; gap: 20px; }
+        .menu-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #666; }
+        .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 22px; color: #1a1a1a; text-decoration: none; }
+        .logo-icon { background: #0066cc; color: white; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 18px; }
+        .logo span { color: #8a2be2; }
+        .nav-tabs { display: flex; gap: 10px; }
+        .tab-btn { background: #eef2ff; border: 1px solid #e0e7ff; padding: 8px 16px; border-radius: 20px; font-weight: 600; color: #312e81; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .nav-right { display: flex; align-items: center; gap: 15px; color: #666; }
+        .nav-right-btn { background: none; border: 1px solid #e5e7eb; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #4b5563; }
+
+        /* মেইন কন্টেন্ট */
+        .workspace-container { max-width: 800px; margin: 50px auto 0; padding: 0 20px; }
+        .hero-section { text-align: center; margin-bottom: 35px; }
+        .hero-tag { font-size: 12px; font-weight: 700; color: #0066cc; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+        .hero-title { font-size: 32px; font-weight: 700; color: #111827; margin-bottom: 12px; }
+        .hero-subtitle { font-size: 15px; color: #6b7280; }
+
+        /* ইনপুট বক্স */
+        .search-box-wrapper { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 30px; }
+        .input-group { display: flex; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 16px; padding: 6px 10px; align-items: center; }
+        .input-group input { flex: 1; border: none; background: transparent; padding: 14px 10px; font-size: 15px; outline: none; color: #374151; }
+        .btn-shorten { background: #0066cc; color: white; border: none; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: background 0.2s; }
+        .btn-shorten:hover { background: #0052a3; }
+        .advanced-opt { margin-top: 15px; display: flex; align-items: center; gap: 8px; font-size: 14px; color: #4b5563; font-weight: 500; cursor: pointer; width: max-content; }
+        .advanced-opt input { cursor: pointer; width: 16px; height: 16px; }
+
+        /* লিঙ্ক ম্যানেজমেন্ট ড্যাশবোর্ড */
+        .management-box { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .manage-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; padding-bottom: 15px; margin-bottom: 20px; }
+        .manage-title { font-size: 12px; font-weight: 700; color: #0066cc; letter-spacing: 1px; text-transform: uppercase; }
+        .total-stats { font-size: 15px; font-weight: 500; color: #4b5563; }
+        .total-stats span { font-weight: 700; font-size: 24px; color: #111827; margin-right: 4px; }
+
+        /* স্ট্যাটাস বার */
+        .status-bar { display: flex; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 15px 20px; margin-bottom: 25px; }
+        .status-item { flex: 1; }
+        .status-title { font-size: 14px; font-weight: 600; color: #0066cc; margin-bottom: 6px; }
+        .status-sub { font-size: 13px; color: #6b7280; font-weight: 500; }
+        .progress-line { height: 4px; background: #e5e7eb; border-radius: 2px; margin-top: 10px; position: relative; overflow: hidden; }
+        .progress-fill { position: absolute; left: 0; top: 0; height: 100%; width: 10%; background: #0066cc; border-radius: 2px; }
+
+        /* লিঙ্ক লিস্ট আইটেম */
+        .link-list { display: flex; flex-direction: column; gap: 20px; }
+        .link-card { background: white; border: 1px solid #f0f2f5; border-radius: 14px; padding: 5px 0; }
+        .card-row-top { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 15px; position: relative; }
+        .card-icon { width: 36px; height: 36px; background: #f3f4f6; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #4b5563; margin-top: 2px; }
+        .card-details { flex: 1; overflow: hidden; }
+        .card-url-original { font-size: 15px; color: #0066cc; font-weight: 600; text-decoration: none; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+        .card-meta { font-size: 12px; color: #9ca3af; font-weight: 500; }
+        .card-meta span { margin-right: 10px; }
+        
+        .card-row-bottom { display: flex; justify-content: space-between; align-items: center; background: #fafbfc; border-top: 1px solid #f3f4f6; padding: 12px 15px; border-radius: 0 0 14px 14px; }
+        .google-link-wrapper { display: flex; align-items: center; gap: 8px; flex: 1; overflow: hidden; }
+        .g-logo { color: #ea4335; font-size: 16px; font-weight: 700; }
+        .card-url-short { font-size: 14px; color: #111827; font-weight: 600; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .btn-copy-card { background: none; border: none; font-size: 13px; font-weight: 600; color: #4b5563; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+        .btn-copy-card:hover { background: #f3f4f6; }
+        
+        .card-stats-views { text-align: right; min-width: 80px; }
+        .views-count { font-size: 18px; font-weight: 700; color: #111827; }
+        .views-label { font-size: 11px; color: #9ca3af; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* কার্ড অ্যাকশন বাটনসমূহ */
+        .card-actions { display: flex; gap: 8px; margin-top: 10px; padding: 0 15px 10px; }
+        .action-btn { background: none; border: 1px solid #e5e7eb; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #6b7280; transition: all 0.2s; }
+        .action-btn:hover { background: #f9fafb; color: #111827; }
+        .action-btn.delete:hover { background: #fef2f2; color: #ef4444; border-color: #fca5a5; }
+
         .hidden { display: none !important; }
-        .footer-links { margin-top: 40px; font-size: 13px; color: #94a3b8; }
-        .footer-links a { color: #64748b; text-decoration: none; margin: 0 5px; }
-        .copyright { margin-top: 15px; font-size: 12px; }
-        @media (max-width: 500px) {
-            .input-group { flex-direction: column; background: transparent; border: none; padding: 0; }
-            .input-group input { background: #fff; border: 2px solid #e2e8f0; border-radius: 12px; margin-bottom: 10px; }
-            .btn-shorten { padding: 14px; border-radius: 12px; }
-        }
     </style>
 </head>
 <body>
-    <div class="shortener-container">
-        <h1 class="brand-title">Gshort<span>.net</span></h1>
-        <p class="brand-subtitle">আপনার বড় লিঙ্কগুলোকে মুহূর্তেই ছোট এবং সচল করুন।</p>
-        <div class="shortener-form">
-            <div class="input-group">
-                <input type="url" id="long-url" placeholder="এখানে আপনার বড় লিঙ্কটি পেস্ট করুন..." required>
-                <button id="shorten-btn" class="btn-shorten">Shorten URL</button>
+
+    <!-- টপ নেভিগেশন বার -->
+    <div class="navbar">
+        <div class="nav-left">
+            <button class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+            <a href="#" class="logo"><div class="logo-icon">G</div>Gshort<span>.net</span></a>
+            <div class="nav-tabs">
+                <button class="tab-btn"><i class="fa-solid fa-link"></i> My links</button>
             </div>
         </div>
-        <div id="result-box" class="result-container hidden">
-            <p class="result-label">আপনার সচল শর্ট লিঙ্ক তৈরি হয়েছে:</p>
-            <div class="result-field">
-                <input type="text" id="shortened-url" readonly value="">
-                <button id="copy-btn" class="btn-copy">Copy</button>
-            </div>
-            <p id="copy-success" class="success-text hidden">✓ লিঙ্কটি কপি হয়েছে!</p>
-        </div>
-        <div class="footer-links">
-            <a href="#">Privacy</a> • <a href="#">Terms</a> • <a href="#">Report Abuse</a>
-            <p class="copyright">© 2026 Gshort.net</p>
+        <div class="nav-right">
+            <button class="nav-right-btn"><i class="fa-regular fa-credit-card"></i></button>
+            <button class="nav-right-btn"><i class="fa-solid fa-arrow-rotate-left"></i></button>
+            <button class="nav-right-btn"><i class="fa-solid fa-gear"></i></button>
+            <button class="nav-right-btn"><i class="fa-regular fa-circle-question"></i></button>
+            <button class="nav-right-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            <button class="nav-right-btn"><i class="fa-regular fa-sun"></i></button>
         </div>
     </div>
-    <script>
-        const API = window.location.origin;
-        document.getElementById('shorten-btn').addEventListener('click', function() {
-            const longUrl = document.getElementById('long-url').value.trim();
-            const shortenBtn = document.getElementById('shorten-btn');
-            const resultBox = document.getElementById('result-box');
-            const shortenedUrlField = document.getElementById('shortened-url');
-            const copySuccess = document.getElementById('copy-success');
 
-            if (longUrl === "") { alert("দয়া করে একটি সঠিক লিঙ্ক প্রদান করুন।"); return; }
-            shortenBtn.innerText = "Shortening...";
-            shortenBtn.disabled = true;
-            copySuccess.classList.add('hidden');
+    <!-- ওয়ার্কস্পেস কন্টেইনার -->
+    <div class="workspace-container">
+        <div class="hero-section">
+            <p class="hero-tag">Gshort · Simple Link Workspace</p>
+            <h1 class="hero-title">Create your short link</h1>
+            <p class="hero-subtitle">Paste a destination, shorten it and manage everything below.</p>
+        </div>
 
-            fetch(API + "/api/shorten", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ url: longUrl })
-            })
-            .then(response => {
-                if (!response.ok) { return response.json().then(err => { throw new Error(err.error || 'Error'); }); }
-                return response.json();
-            })
-            .then(data => {
-                if (data.ok && data.short_url) {
-                    resultBox.classList.remove('hidden');
-                    shortenedUrlField.value = data.short_url;
-                } else { throw new Error('Invalid response'); }
-            })
-            .catch(error => { console.error("Error:", error); alert(error.message || "লিঙ্কটি তৈরি করতে সমস্যা হয়েছে।"); })
-            .finally(() => { shortenBtn.innerText = "Shorten URL"; shortenBtn.disabled = false; });
-        });
-
-        document.getElementById('copy-btn').addEventListener('click', function() {
-            const shortenedUrlField = document.getElementById('shortened-url');
-            const copySuccess = document.getElementById('copy-success');
-            if (shortenedUrlField.value !== "") {
-                navigator.clipboard.writeText(shortenedUrlField.value)
-                    .then(() => { copySuccess.classList.remove('hidden'); })
-                    .catch(err => { console.error("Copy failed: ", err); });
-            }
-        });
-    </script>
-</body>
-</html>
-"""
-
-
-@app.get("/")
-def home():
-    # সরাসরি এইচটিএমএল স্ট্রিং রেসপন্স হিসেবে পাঠানো হচ্ছে
-    return HTML_PAGE
-
-
-@app.get("/health")
-def health():
-    return jsonify({"ok": True})
-
-
-@app.post("/api/shorten")
-def shorten():
-    data = request.get_json(silent=True) or {}
-    target = str(data.get("url", "")).strip()
-
-    if not valid_url(target):
-        return jsonify({
-            "ok": False,
-            "error": "Enter a valid http:// or https:// URL."
-        }), 400
-
-    code = make_code()
-
-    LINKS[code] = {
-        "url": target,
-        "clicks": 0
-    }
-
-    base = request.host_url.rstrip("/")
-    short_url = f"{base}/r/{code}"
-
-    return jsonify({
-        "ok": True,
-        "code": code,
-        "url": target,
-        "short_url": short_url
-    })
-
-
-@app.get("/r/<code>")
-def redirect_link(code):
-    item = LINKS.get(code)
-
-    if not item:
-        return "Short link not found.", 404
-
-    item["clicks"] += 1
-
-    return redirect(
-        item["url"],
-        code=302
-    )
-
-
-@app.get("/api/link/<code>")
-def link_info(code):
-    item = LINKS.get(code)
-
-    if not item:
-        return jsonify({
-            "ok": False,
-            "error": "Short link not found."
-        }), 404
-
-    return jsonify({
-        "ok": True,
-        "code": code,
-        "url": item["url"],
-        "clicks": item["clicks"]
-    })
-
-
-if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", "5000"))
-    )
+        <!-- শর্টনার ইনপুট বক্স -->
+        <div class="search-box-wrapper">
+            <div class="input-group">
+                <input type="url" id="long-url" placeholder="https://example.com" required>
+                <button id="shorten-btn" class="btn-shorten"><i class="fa-solid fa-scissors"></i></button>
+            </div>
+            <label class="advanced-opt">

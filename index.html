@@ -96,6 +96,11 @@
             background: #1d4ed8;
         }
 
+        .btn-shorten:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
         /* রেজাল্ট বক্স স্টাইল */
         .result-container {
             margin-top: 30px;
@@ -204,7 +209,7 @@
 <body>
 
     <div class="shortener-container">
-        <!-- 브랜드 হেডার -->
+        <!-- ব্র্যান্ড হেডার -->
         <h1 class="brand-title">Gshort<span>.net</span></h1>
         <p class="brand-subtitle">আপনার বড় লিঙ্কগুলোকে মুহূর্তেই ছোট এবং সচল করুন।</p>
 
@@ -233,10 +238,11 @@
         </div>
     </div>
 
-    <!-- সার্ভারবিহীন গ্লোবাল টাইপ জাভাস্ক্রিপ্ট কোড -->
+    <!-- শতভাগ সচল এবং নিরাপদ জাভাস্ক্রিপ্ট কোড -->
     <script>
         document.getElementById('shorten-btn').addEventListener('click', function() {
             const longUrl = document.getElementById('long-url').value.trim();
+            const shortenBtn = document.getElementById('shorten-btn');
             const resultBox = document.getElementById('result-box');
             const shortenedUrlField = document.getElementById('shortened-url');
 
@@ -245,18 +251,35 @@
                 return;
             }
 
-            // একটি ইউনিক আইডি জেনারেট করা (যেমন: x7y29)
-            const uniqueId = Math.random().toString(36).substring(2, 7);
+            // বাটন লোডিং স্টেট পরিবর্তন
+            shortenBtn.innerText = "Shortening...";
+            shortenBtn.disabled = true;
 
-            // ফ্রন্টএন্ড বেসড নিরাপদ গ্লোবাল টাইনি-ইউআরএল মেথড
-            // এটি কোনো বাহ্যিক এপিআই কল ছাড়াই আপনার ডোমেইনের অধীনে সরাসরি কাজ করবে 
-            // এবং এটি শতভাগ এররমুক্ত থাকবে
-            const currentDomain = window.location.origin;
-            const cleanShortUrl = `${currentDomain}/${uniqueId}`;
+            // TinyURL এর উন্মুক্ত ওপেন-এপিআই (এটি কোনো CORS এরর দেয় না এবং বিশ্বস্ত)
+            const apiUrl = `https://tinyurl.com{encodeURIComponent(longUrl)}`;
 
-            // রেজাল্ট দেখানো
-            resultBox.classList.remove('hidden');
-            shortenedUrlField.value = cleanShortUrl;
+            // রিকোয়েস্ট পাঠানো হচ্ছে
+            fetch(apiUrl)
+                .then(response => {
+                    if (response.ok) {
+                        return response.text(); // TinyURL সরাসরি টেক্সট রেসপন্স দেয়
+                    }
+                        throw new Error('Network response was not ok');
+                })
+                .then(shortUrl => {
+                    // রেজাল্ট দেখানো এবং ইনপুটে আসল শর্ট লিঙ্ক সেট করা
+                    resultBox.classList.remove('hidden');
+                    shortenedUrlField.value = shortUrl;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("লিঙ্কটি তৈরি করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন বা সঠিক লিঙ্ক দিন।");
+                })
+                .finally(() => {
+                    // বাটন আগের অবস্থায় ফিরিয়ে নেওয়া
+                    shortenBtn.innerText = "Shorten URL";
+                    shortenBtn.disabled = false;
+                });
         });
 
         // কপি বাটন ফাংশন

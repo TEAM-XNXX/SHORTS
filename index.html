@@ -25,8 +25,8 @@ async function shortenURL() {
 
         const data = await response.json();
         
-        // এখানে আপনার চাওয়া ফরম্যাট (?q=আইডি) অনুযায়ী শর্ট লিংক তৈরি করা হচ্ছে
-        const shortUrl = `${window.location.origin}/?q=${data.shortId}`;
+        // আপনার পছন্দসই কুয়েরি প্যারামিটার ফরম্যাট
+        const shortUrl = `${window.location.origin}/api/index?q=${data.shortId}`;
         
         shortenedLink.href = shortUrl;
         shortenedLink.innerText = shortUrl;

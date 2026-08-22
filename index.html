@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gshort.net · URL Shortener</title>
+    <title>Gshort.net · Free URL Shortener</title>
     
     <style>
         /* বেসিক রিসেট */
@@ -92,8 +92,9 @@
             white-space: nowrap;
         }
 
-        .btn-shorten:hover {
-            background: #1d4ed8;
+        .btn-shorten:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
         }
 
         /* রেজাল্ট বক্স স্টাইল */
@@ -171,22 +172,16 @@
             margin: 0 5px;
         }
 
-        .footer-links a:hover {
-            text-decoration: underline;
-        }
-
         .copyright {
             margin-top: 15px;
             font-size: 12px;
         }
 
-        /* অ্যানিমেশন */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* মোবাইল রেসপনসিভ */
         @media (max-width: 500px) {
             .input-group {
                 flex-direction: column;
@@ -212,7 +207,7 @@
     <div class="shortener-container">
         <!-- ব্র্যান্ড হেডার -->
         <h1 class="brand-title">Gshort<span>.net</span></h1>
-        <p class="brand-subtitle">আপনার বড় লিঙ্কগুলোকে মুহূর্তেই ছোট এবং আকর্ষণীয় করুন।</p>
+        <p class="brand-subtitle">আপনার বড় লিঙ্কগুলোকে মুহূর্তেই ছোট এবং সচল করুন।</p>
 
         <!-- শর্টনার ফর্ম -->
         <div class="shortener-form">
@@ -224,7 +219,7 @@
 
         <!-- রেজাল্ট সেকশন -->
         <div id="result-box" class="result-container hidden">
-            <p class="result-label">আপনার শর্ট লিঙ্ক তৈরি হয়েছে:</p>
+            <p class="result-label">আপনার সচল শর্ট লিঙ্ক তৈরি হয়েছে:</p>
             <div class="result-field">
                 <input type="text" id="shortened-url" readonly value="">
                 <button id="copy-btn" class="btn-copy">Copy</button>
@@ -239,37 +234,48 @@
         </div>
     </div>
 
-    <!-- ফিক্সড জাভাস্ক্রিপ্ট কোড -->
+    <!-- এপিআই সমৃদ্ধ জাভাস্ক্রিপ্ট কোড -->
     <script>
-        // র্যান্ডম আলফানিউমেরিক কী জেনারেট করার ফাংশন (যেমন: qLf0aM3hhImkBEBfG)
-        function generateRandomKey(length) {
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let result = '';
-            for (let i = 0; i < length; i++) {
-                result += characters.charAt(Math.floor(Math.random() * characters.length));
-            }
-            return result;
-        }
-
         document.getElementById('shorten-btn').addEventListener('click', function() {
-            const longUrl = document.getElementById('long-url').value;
-            
-            if (longUrl.trim() === "") {
+            const longUrlInput = document.getElementById('long-url');
+            const longUrl = longUrlInput.value.trim();
+            const shortenBtn = document.getElementById('shorten-btn');
+            const resultBox = document.getElementById('result-box');
+            const shortenedUrlField = document.getElementById('shortened-url');
+
+            if (longUrl === "") {
                 alert("দয়া করে একটি সঠিক লিঙ্ক প্রদান করুন।");
                 return;
             }
 
-            const resultBox = document.getElementById('result-box');
-            resultBox.classList.remove('hidden');
-            
-            // ১৭ অক্ষরের ইউনিক র্যান্ডম কী জেনারেশন
-            const randomKey = generateRandomKey(17);
-            
-            // আপনার কাঙ্ক্ষিত গুগল শেয়ারিং ইউআরএল ফরম্যাট সেট করা হলো
-            document.getElementById('shortened-url').value = "https://www.google.com/share.google?q=" + randomKey;
+            // বাটন লোডিং স্টেট
+            shortenBtn.innerText = "Shortening...";
+            shortenBtn.disabled = true;
+
+            // ফ্রি এবং ওপেন API ব্যবহার করে লিঙ্ক রিডাইরেকশন সচল করা
+            const apiUrl = `https://is.gd{encodeURIComponent(longUrl)}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.shorturl) {
+                        resultBox.classList.remove('hidden');
+                        shortenedUrlField.value = data.shorturl; // এই লিঙ্কটি ক্লিক করলেই কাজ করবে
+                    } else {
+                        alert("লিঙ্কটি শর্ট করতে সমস্যা হয়েছে। দয়া করে সঠিক ইউআরএল দিন।");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("সার্ভার সমস্যা! আবার চেষ্টা করুন।");
+                })
+                .finally(() => {
+                    shortenBtn.innerText = "Shorten URL";
+                    shortenBtn.disabled = false;
+                });
         });
 
-        // কপি বাটন কোড
+        // কপি বাটন ফাংশন
         document.getElementById('copy-btn').addEventListener('click', function() {
             const copyText = document.getElementById('shortened-url');
             copyText.select();

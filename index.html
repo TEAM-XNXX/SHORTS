@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gshort.net · URL Shortener</title>
     
-    <!-- সিএসএস (CSS) কোড এখানে যুক্ত করা হয়েছে -->
     <style>
         /* বেসিক রিসেট */
         * {
@@ -35,7 +34,7 @@
             text-align: center;
         }
 
-        /*ブランド টেক্সট */
+        /* ব্র্যান্ড টেক্সট */
         .brand-title {
             font-size: 36px;
             color: #1e293b;
@@ -125,7 +124,7 @@
             padding: 12px;
             border: 1px solid #cbd5e1;
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 15px;
             background: #fff;
             color: #1e293b;
             font-weight: 500;
@@ -211,19 +210,19 @@
 <body>
 
     <div class="shortener-container">
-        <!-- ব্র্যান্ড লোগো বা হেডার -->
+        <!-- ব্র্যান্ড হেডার -->
         <h1 class="brand-title">Gshort<span>.net</span></h1>
         <p class="brand-subtitle">আপনার বড় লিঙ্কগুলোকে মুহূর্তেই ছোট এবং আকর্ষণীয় করুন।</p>
 
         <!-- শর্টনার ফর্ম -->
         <div class="shortener-form">
             <div class="input-group">
-                <input type="url" id="long-url" placeholder="এখানে আপনার বড় লিঙ্কটি পেস্ট করুন (e.g., https://example.com)..." required>
+                <input type="url" id="long-url" placeholder="এখানে আপনার বড় লিঙ্কটি পেস্ট করুন..." required>
                 <button id="shorten-btn" class="btn-shorten">Shorten URL</button>
             </div>
         </div>
 
-        <!-- রেজাল্ট সেকশন (লিঙ্ক শর্ট হওয়ার পর এটি দেখাবে) -->
+        <!-- রেজাল্ট সেকশন -->
         <div id="result-box" class="result-container hidden">
             <p class="result-label">আপনার শর্ট লিঙ্ক তৈরি হয়েছে:</p>
             <div class="result-field">
@@ -240,8 +239,18 @@
         </div>
     </div>
 
-    <!-- জাভাস্ক্রিপ্ট (JavaScript) কোড এখানে যুক্ত করা হয়েছে -->
+    <!-- ফিক্সড জাভাস্ক্রিপ্ট কোড -->
     <script>
+        // র্যান্ডম আলফানিউমেরিক কী জেনারেট করার ফাংশন (যেমন: qLf0aM3hhImkBEBfG)
+        function generateRandomKey(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
         document.getElementById('shorten-btn').addEventListener('click', function() {
             const longUrl = document.getElementById('long-url').value;
             
@@ -250,27 +259,26 @@
                 return;
             }
 
-            // রেজাল্ট বক্সটি শো করানো হচ্ছে
             const resultBox = document.getElementById('result-box');
             resultBox.classList.remove('hidden');
             
-            // ডেমো হিসেবে একটি র্যান্ডম শর্ট লিঙ্ক জেনারেট করা হচ্ছে
-            // পরবর্তীতে ব্যাকএন্ড API বসালে এটি পরিবর্তন করতে পারবেন
-            const randomString = Math.random().toString(36).substring(2, 8);
-            document.getElementById('shortened-url').value = "https://gshort.net" + randomString;
+            // ১৭ অক্ষরের ইউনিক র্যান্ডম কী জেনারেশন
+            const randomKey = generateRandomKey(17);
+            
+            // আপনার কাঙ্ক্ষিত গুগল শেয়ারিং ইউআরএল ফরম্যাট সেট করা হলো
+            document.getElementById('shortened-url').value = "https://www.google.com/share.google?q=" + randomKey;
         });
 
-        // কপি বাটন ফাংশনালিটি
+        // কপি বাটন কোড
         document.getElementById('copy-btn').addEventListener('click', function() {
             const copyText = document.getElementById('shortened-url');
             copyText.select();
-            copyText.setSelectionRange(0, 99999); // মোবাইল ডিভাইসের সেফটির জন্য
+            copyText.setSelectionRange(0, 99999);
 
             navigator.clipboard.writeText(copyText.value).then(() => {
                 const successMsg = document.getElementById('copy-success');
                 successMsg.classList.remove('hidden');
                 
-                // ৩ সেকেন্ড পর সাকসেস মেসেজটি আবার হাইড হয়ে যাবে
                 setTimeout(() => {
                     successMsg.classList.add('hidden');
                 }, 3000);

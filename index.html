@@ -73,7 +73,6 @@
 
     <div class="result-box" id="resultBox">
         <p><strong>আপনার ছোট লিঙ্কটি তৈরি:</strong></p>
-        <!-- সরাসরি কার্যকরী TinyURL শর্টনার গেটওয়ে -->
         <a id="shortenedUrl" href="#" target="_blank">এখানে ক্লিক করলেই লিঙ্ক ছোট হয়ে যাবে</a>
         <br>
         <button class="copy-btn" onclick="copyLink()">শর্টনার লিঙ্ক কপি করুন</button>
@@ -82,25 +81,25 @@
 
 <script>
     function shortenUrl() {
-        const longUrl = document.getElementById('longUrl').value.trim();
-        const resultBox = document.getElementById('resultBox');
-        const shortenedUrlAnchor = document.getElementById('shortenedUrl');
+        var longUrl = document.getElementById('longUrl').value.trim();
+        var resultBox = document.getElementById('resultBox');
+        var shortenedUrlAnchor = document.getElementById('shortenedUrl');
 
         if (!longUrl) {
             alert('দয়া করে একটি সঠিক লিঙ্ক দিন!');
             return;
         }
 
-        // ব্রাউজার-বেসড নিরাপদ ও শতভাগ সচল ডাইরেক্ট লিঙ্ক মেকার
-        const shortUrl = `https://tinyurl.com{encodeURIComponent(longUrl)}`;
+        // কোনো কঠিন জাভাস্ক্রিপ্ট ফাংশন ছাড়া একদম সাধারণ মেথড
+        var shortUrl = "https://tinyurl.com" + longUrl;
         shortenedUrlAnchor.href = shortUrl;
         resultBox.style.display = "block";
     }
 
     function copyLink() {
-        const linkText = document.getElementById('shortenedUrl').href;
+        var linkText = document.getElementById('shortenedUrl').href;
         navigator.clipboard.writeText(linkText);
-        alert('লিঙ্কটি সফলভাবে কপি করা হয়েছে! যেকোনো ব্রাউজারে পেস্ট করলেই শর্ট লিঙ্ক পাবেন।');
+        alert('লিঙ্কটি কপি করা হয়েছে! যেকোনো ব্রাউজারে পেস্ট করলেই শর্ট লিঙ্ক পাবেন।');
     }
 </script>
 

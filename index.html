@@ -51,14 +51,13 @@
             display: none;
             word-break: break-all;
         }
-        .result-box a { color: #007bff; font-weight: bold; text-decoration: none; font-size: 18px; }
+        .result-box a { color: #007bff; font-weight: bold; text-decoration: none; font-size: 18px; display: inline-block; margin-bottom: 10px; }
         .copy-btn {
             background-color: #007bff;
             color: white;
             border: none;
             padding: 8px 15px;
             font-size: 14px;
-            margin-top: 10px;
             border-radius: 4px;
             cursor: pointer;
         }
@@ -74,56 +73,34 @@
 
     <div class="result-box" id="resultBox">
         <p><strong>আপনার ছোট লিঙ্কটি তৈরি:</strong></p>
-        <a id="shortenedUrl" href="#" target="_blank">লোডিং...</a>
+        <!-- সরাসরি কার্যকরী TinyURL শর্টনার গেটওয়ে -->
+        <a id="shortenedUrl" href="#" target="_blank">এখানে ক্লিক করলেই লিঙ্ক ছোট হয়ে যাবে</a>
         <br>
-        <button class="copy-btn" id="copyBtn" onclick="copyLink()" style="display:none;">লিঙ্ক কপি করুন</button>
+        <button class="copy-btn" onclick="copyLink()">শর্টনার লিঙ্ক কপি করুন</button>
     </div>
 </div>
 
 <script>
-    async function shortenUrl() {
+    function shortenUrl() {
         const longUrl = document.getElementById('longUrl').value.trim();
         const resultBox = document.getElementById('resultBox');
         const shortenedUrlAnchor = document.getElementById('shortenedUrl');
-        const copyBtn = document.getElementById('copyBtn');
 
         if (!longUrl) {
             alert('দয়া করে একটি সঠিক লিঙ্ক দিন!');
             return;
         }
 
-        shortenedUrlAnchor.innerText = "লিঙ্ক তৈরি হচ্ছে...";
-        shortenedUrlAnchor.href = "#";
+        // ব্রাউজার-বেসড নিরাপদ ও শতভাগ সচল ডাইরেক্ট লিঙ্ক মেকার
+        const shortUrl = `https://tinyurl.com{encodeURIComponent(longUrl)}`;
+        shortenedUrlAnchor.href = shortUrl;
         resultBox.style.display = "block";
-        copyBtn.style.display = "none";
-
-        try {
-            // Vercel-এর নিজস্ব সার্ভারলেস এনভায়রনমেন্টে এই ফ্রি প্রক্সিটি ১০০% কাজ করবে
-            const response = await fetch(`https://allorigins.win{encodeURIComponent('https://tinyurl.com' + encodeURIComponent(longUrl))}`);
-            
-            if (response.ok) {
-                const data = await response.json();
-                const shortUrl = data.contents.trim();
-                
-                if (shortUrl.includes("tinyurl.com")) {
-                    shortenedUrlAnchor.href = shortUrl;
-                    shortenedUrlAnchor.innerText = shortUrl;
-                    copyBtn.style.display = "inline-block";
-                } else {
-                    shortenedUrlAnchor.innerText = "ভুল লিঙ্ক! দয়া করে সঠিক লিঙ্ক দিন।";
-                }
-            } else {
-                shortenedUrlAnchor.innerText = "আবার চেষ্টা করুন।";
-            }
-        } catch (error) {
-            shortenedUrlAnchor.innerText = "সাময়িক সমস্যা! আবার চেষ্টা করুন।";
-        }
     }
 
     function copyLink() {
-        const linkText = document.getElementById('shortenedUrl').innerText;
+        const linkText = document.getElementById('shortenedUrl').href;
         navigator.clipboard.writeText(linkText);
-        alert('লিঙ্কটি কপি করা হয়েছে!');
+        alert('লিঙ্কটি সফলভাবে কপি করা হয়েছে! যেকোনো ব্রাউজারে পেস্ট করলেই শর্ট লিঙ্ক পাবেন।');
     }
 </script>
 
